@@ -9,7 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -144,14 +143,5 @@ public class HttpClientPoolUtil {
         method.addHeader("Accept", DEFAULT_CONTENT_TYPE);
         method.setConfig(requestConfig);
         return method;
-    }
-
-
-    public static void reset() {
-        synchronized (HttpClientPoolUtil.class) {
-            ClientConnectionManager cm = httpClient.getConnectionManager();
-            cm.closeExpiredConnections();
-            cm.closeIdleConnections(100, TimeUnit.MILLISECONDS);
-        }
     }
 }

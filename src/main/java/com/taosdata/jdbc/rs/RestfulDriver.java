@@ -84,8 +84,8 @@ public class RestfulDriver extends AbstractDriver {
             if (null != cloudToken) {
                 loginUrl = loginUrl + "?token=" + cloudToken;
             }
-            WSClient client;
-            Transport transport;
+            WSClient client = null;
+            Transport transport = null;
             try {
                 int timeout = props.containsKey(TSDBDriver.PROPERTY_KEY_MESSAGE_WAIT_TIMEOUT)
                         ? Integer.parseInt(props.getProperty(TSDBDriver.PROPERTY_KEY_MESSAGE_WAIT_TIMEOUT))
@@ -113,6 +113,12 @@ public class RestfulDriver extends AbstractDriver {
                 throw new SQLException("Websocket url parse error: " + loginUrl, e);
             } catch (InterruptedException e) {
                 throw new SQLException("creat websocket connection has been Interrupted ", e);
+            } finally {
+                if (null != transport) {
+                    transport.close();
+                } else if (null != client) {
+                    client.close();
+                }
             }
             props.setProperty(TSDBDriver.PROPERTY_KEY_TIMESTAMP_FORMAT, String.valueOf(TimestampFormat.TIMESTAMP));
             return new WSConnection(url, props, transport, database);

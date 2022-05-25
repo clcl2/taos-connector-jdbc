@@ -14,15 +14,15 @@ public class InFlightRequest {
     private final Semaphore semaphore;
     private final Map<String, ConcurrentHashMap<Long, ResponseFuture>> futureMap = new HashMap<>();
     private final Map<String, PriorityBlockingQueue<ResponseFuture>> expireMap = new HashMap<>();
-    private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(r -> {
-        Thread t = new Thread(r);
-        t.setName("timer-" + t.getId());
-        return t;
-    });
 
     public InFlightRequest(int timeoutSec, int concurrentNum) {
         this.timeoutSec = timeoutSec;
         this.semaphore = new Semaphore(concurrentNum);
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setName("timer-" + t.getId());
+            return t;
+        });
         scheduledExecutorService.scheduleWithFixedDelay(this::removeTimeoutFuture,
                 timeoutSec, timeoutSec, TimeUnit.MILLISECONDS);
         Runtime.getRuntime().addShutdownHook(new Thread(scheduledExecutorService::shutdown));

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class RestfulResultSet extends AbstractResultSet implements ResultSet {
+public class RestfulResultSet extends AbstractResultSet {
 
     public static DateTimeFormatter rfc3339Parser = null;
 
@@ -226,7 +226,6 @@ public class RestfulResultSet extends AbstractResultSet implements ResultSet {
                 String value = row.getString(colIndex);
                 if (value.lastIndexOf(":") > 19) {
                     ZonedDateTime parse = ZonedDateTime.parse(value, rfc3339Parser);
-                    long nanoAdjustment;
                     if (value.length() > 32) {
                         // ns timestamp: yyyy-MM-ddTHH:mm:ss.SSSSSSSSS+0x:00
                         this.timestampPrecision = TimestampPrecision.NS;

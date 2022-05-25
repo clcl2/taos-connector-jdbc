@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class TSDBResultSet extends AbstractResultSet implements ResultSet {
+public class TSDBResultSet extends AbstractResultSet {
     private final TSDBJNIConnector jniConnector;
     private final TSDBStatement statement;
     private final long resultSetPointer;
@@ -268,7 +268,7 @@ public class TSDBResultSet extends AbstractResultSet implements ResultSet {
         checkAvailability(columnIndex, this.columnMetaDataList.size());
 
         if (this.getBatchFetch())
-            return this.blockData.getBytes(columnIndex -1);
+            return this.blockData.getBytes(columnIndex - 1);
 
         Object value = this.rowData.getObject(columnIndex);
         this.lastWasNull = value == null;
