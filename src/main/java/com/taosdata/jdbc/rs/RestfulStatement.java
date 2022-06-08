@@ -63,7 +63,7 @@ public class RestfulStatement extends AbstractStatement {
         //如果执行了use操作应该将当前Statement的catalog设置为新的database
         boolean result = true;
 
-        String response = HttpClientPoolUtil.execute(getUrl(), sql, this.conn.getAuth());
+        String response = HttpClientPoolUtil.execute(getUrl(), sql, this.conn.getToken());
         JSONObject jsonObject = JSON.parseObject(response);
         if (null == jsonObject) {
             throw TSDBError.createSQLException(TSDBErrorNumbers.ERROR_UNKNOWN, "sql: " + sql);
